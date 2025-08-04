@@ -1,0 +1,42 @@
+{
+  "name": "k-meteofrance",
+  "description": "A Krawler job designed to scrape data from the Météo-France public API",
+  "version": "0.1.0",
+  "homepage": "https://github.com/kalisio/k-meteofrance",
+  "type": "module",
+  "keywords": [
+    "krawler",
+    "meteo",
+    "radar",
+    "kargo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kalisio/k-meteofrance.git"
+  },
+  "author": {
+    "name": "Kalisio",
+    "url": "https://github.com/kalisio"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/kalisio/k-meteofrance/-/issues"
+  },
+  "scripts": {
+    "test": "echo \"Warning: no test specified\"",
+    "mmdc": "./node_modules/.bin/mmdc -i jobfile.mmd -o jobfile.png -w 512",
+    "release:major": "npm version --force major",
+    "release:minor": "npm version --force minor",
+    "release:patch": "npm version --force patch",
+    "postversion": "git push origin HEAD --tags"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "moment": "^2.29.3",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@kalisio/krawler": "2.6.0"
+  }
+}
