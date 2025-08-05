@@ -94,8 +94,11 @@ export default {
                   _.set(observation, 'properties.windSpeed', _.toNumber(record.properties.ff))
                 }
                 // precipitation
+                if (!_.isNull(record.properties.rr1)) {
+                  _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr1))
+                }
                 if (!_.isNull(record.properties.rr_per)) {
-                  _.set(observation, 'properties.humidity', _.toNumber(record.properties.rr_per))
+                  _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr_per))
                 }
                 observations.push(observation)
               }

@@ -8,16 +8,45 @@ A [Krawler](https://kalisio.github.io/krawler/) based service to download divers
 
 ## paquetobs jobs
 
-The **paquetobs** job files enable the scraping of real-time observations from all weather stations exposed by the public API [Package Observations](https://portail-api.meteofrance.fr/web/fr/api/DonneesPubliquesPaquetObservation).
+The **paquetobs** job files enable the scraping of [real-time observations](https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=93&id_rubrique=32) from all weather 
+stations of the French network at hourly and/or sub-hourly intervals (every 6 minutes). These data are exposed by the public API [Package Observations](https://portail-api.meteofrance.fr/web/fr/api/DonneesPubliquesPaquetObservation).
 
-### stations
+This repository provides with 2 jobs:
+
+### paquetobs-stations
+
+#### Description
+
+This job allows to scape the stations. The main collected properties are:
+* **id**, the id of the station
+* **name**, the name of the station
+* **location**, the location of the station
+
+The station data are stored in compliance with the **GeoJSON** standard.
+
+#### Configuration
 
 | Variable | Description |
 |--- | --- |
 | `DEPARTMENTS` | The list of departments used to filter the collected stations. |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
-### observations
+### paquetobs-observations
+
+#### Description
+
+This job allows to scape the observations. The basic collected properties are:
+* **id**, the id of the station
+* **name**, the name of the station
+* **temperature** (°),
+* **humidity** (%),
+* **wind direction** (°),
+* **wind speed** (m/s),
+* **precipitation** (mm/h or mm/6m depending on the frequency)
+
+The observation data are stored in compliance with the **GeoJSON** standard.
+
+#### Configuration
 
 | Variable | Description |
 |--- | --- |
