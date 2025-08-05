@@ -6,7 +6,7 @@
 
 A [Krawler](https://kalisio.github.io/krawler/) based service to download diverse datasets from the public [Météo-France API portal](https://portail-api.meteofrance.fr/web/fr/)
 
-## paquetobs jobs
+## paquetobs
 
 The **paquetobs** job files enable the scraping of [real-time observations](https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=93&id_rubrique=32) from all weather 
 stations of the French network at hourly and/or sub-hourly intervals (every 6 minutes). These data are exposed by the public API [Package Observations](https://portail-api.meteofrance.fr/web/fr/api/DonneesPubliquesPaquetObservation).
