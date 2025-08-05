@@ -3,7 +3,7 @@ import winston from 'winston'
 const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/kano'
 const TOKEN = process.env.OBSERVATIONS_PAQUET_TOKEN
 const OUTPUT_DIR = './output'
-const STATIONS_COLLECTION = 'mf-observation-stations'
+const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 
 export default {
   id: 'paquetobs-stations',

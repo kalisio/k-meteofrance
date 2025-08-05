@@ -9,8 +9,8 @@ const FREQUENCY = process.env.FREQUENCY || 'horaire'
 const LATENCY = +process.env.LATENCY || 0
 const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 const OUTPUT_DIR = './output'
-const MEASUREMENTS_COLLECTION = 'mf-observation-measurements'
-const STATIONS_COLLECTION = 'mf-observation-stations'
+const MEASUREMENTS_COLLECTION = `mf-paquetobs-observations-${FREQUENCY}`
+const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 
 // compute date request according to current time
 let DATE = moment().utc().subtract(LATENCY, 'minutes')
@@ -78,26 +78,26 @@ export default {
                 const observationId = `${station.properties.stationId}-${time}`
                 _.set(observation, 'properties.observationId', observationId)
                 // temperature
-                if (!_.isNull(record.properties.t)) {
+                if (!_.isNil(record.properties.t)) {
                   _.set(observation, 'properties.temperature', _.toNumber(record.properties.t) - 273)
                 }
                 // humidity              
-                if (!_.isNull(record.properties.u)) {
+                if (!_.isNil(record.properties.u)) {
                   _.set(observation, 'properties.humidity', _.toNumber(record.properties.u))
                 }
                 // wind direction
-                if (!_.isNull(record.properties.dd)) {
+                if (!_.isNil(record.properties.dd)) {
                   _.set(observation, 'properties.windDirection', _.toNumber(record.properties.dd))
                 }
                 // wind speed
-                if (!_.isNull(record.properties.ff)) {
+                if (!_.isNil(record.properties.ff)) {
                   _.set(observation, 'properties.windSpeed', _.toNumber(record.properties.ff))
                 }
                 // precipitation
-                if (!_.isNull(record.properties.rr1)) {
+                if (!_.isNil(record.properties.rr1)) {
                   _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr1))
                 }
-                if (!_.isNull(record.properties.rr_per)) {
+                if (!_.isNil(record.properties.rr_per)) {
                   _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr_per))
                 }
                 observations.push(observation)
