@@ -39,7 +39,7 @@ done
 load_env_files "$WORKSPACE_DIR/development/common/kalisio_dockerhub.enc.env"
 load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.enc.value"
 
-## Build container
+## Build job
 ##
 
 build_job \
