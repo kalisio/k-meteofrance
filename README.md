@@ -42,7 +42,7 @@ This job allows to scape the observations. The basic collected properties are:
 * **humidity** (%),
 * **wind direction** (°),
 * **wind speed** (m/s),
-* **precipitation** (mm/h or mm/6m depending on the frequency)
+* **precipitation** (mm/h)
 
 The observation data are stored in compliance with the **GeoJSON** standard.
 

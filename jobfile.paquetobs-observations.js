@@ -98,7 +98,7 @@ export default {
                   _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr1))
                 }
                 if (!_.isNil(record.properties.rr_per)) {
-                  _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr_per))
+                  _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr_per) * 10)
                 }
                 observations.push(observation)
               }
