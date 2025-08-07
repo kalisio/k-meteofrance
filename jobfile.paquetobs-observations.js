@@ -9,7 +9,7 @@ const FREQUENCY = process.env.FREQUENCY || 'horaire'
 const LATENCY = +process.env.LATENCY || 0
 const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 const OUTPUT_DIR = './output'
-const MEASUREMENTS_COLLECTION = `mf-paquetobs-observations-${FREQUENCY}`
+const MEASUREMENTS_COLLECTION = `mf-paquetobs-observations`
 const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 
 // compute date request according to current time
