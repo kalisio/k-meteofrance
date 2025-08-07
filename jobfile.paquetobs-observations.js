@@ -69,7 +69,7 @@ export default {
               if (station) {
                 let observation = _.omit(record, ['properties'])
                 // time
-                const time = record.properties.reference_time
+                const time = record.properties.insert_time
                 _.set(observation, 'time', time)
                 // station
                 _.set(observation, 'properties.stationId', _.toNumber(station.properties.stationId))
