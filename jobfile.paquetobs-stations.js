@@ -54,7 +54,7 @@ export default {
               })
               item.data = filteredStations
             }
-            // converts stationId to number to enhance performance
+            // converts stationId to a number to improve performance
             _.forEach(item.data, station => {
               station.stationId = _.toNumber(station.stationId)
             }) 
