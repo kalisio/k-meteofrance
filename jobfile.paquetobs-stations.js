@@ -43,6 +43,7 @@ export default {
         apply: {
           function: (item) => {
             const stations = item.data
+            // filters the stations based on the departments if required
             const prefixes = _.map(DEPARTMENTS || [], department => {
               const prefix = department.trim().padStart(2, '0')
               if (prefix !== '00' && /^\d{2}$/.test(prefix)) return prefix
@@ -53,6 +54,7 @@ export default {
               })
               item.data = filteredStations
             }
+            // converts stationId to number to enhance performance
             _.forEach(item.data, station => {
               station.stationId = _.toNumber(station.stationId)
             }) 
