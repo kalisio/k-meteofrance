@@ -1,9 +1,11 @@
 import winston from 'winston'
+import _ from 'lodash'
 
 const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/kano'
 const TOKEN = process.env.PAQUETOBS_TOKEN
 const OUTPUT_DIR = './output'
 const STATIONS_COLLECTION = 'mf-paquetobs-stations'
+const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 
 export default {
   id: 'paquetobs-stations',
@@ -35,18 +37,39 @@ export default {
               Nom_usuel: 'name',              
               Date_ouverture: 'openingDate',
               Pack: 'pack'
-            },
-            unitMapping: {
-              stationId: { asNumber: true }
             }
           }
-        }, 
+        },
+        apply: {
+          function: (item) => {
+            const stations = item.data
+            stations.forEach(station => {
+              station.stationId = _.toString(station.stationId);
+            })
+            const prefixes = _.map(DEPARTMENTS || [], department => {
+              const prefix = department.trim().padStart(2, '0')
+              if (prefix !== '00' && /^\d{2}$/.test(prefix)) return prefix
+            })
+            if (_.isEmpty(prefixes)) {
+              return
+            }
+            const filteredStations = stations.filter(station => {
+              return prefixes.some(prefix => station.stationId.startsWith(prefix))
+            })
+            item.data = filteredStations
+          }
+        },
         log: (logger, item) => logger.info(`${item.data.length} stations found.`),
         convertToGeoJson: {
           longitude: 'Longitude',
           latitude: 'Latitude',
-          altitude: 'Altitude'
-        },      
+          altitude: 'Altitude',
+          transform: { 
+            unitMapping: {
+              'properties.stationId': { asNumber: true }
+            }
+          }
+        },
         updateMongoCollection: {
           collection: STATIONS_COLLECTION,
           filter: { 'properties.stationId': '<%= properties.stationId %>' },
