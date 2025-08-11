@@ -43,32 +43,26 @@ export default {
         apply: {
           function: (item) => {
             const stations = item.data
-            stations.forEach(station => {
-              station.stationId = _.toString(station.stationId);
-            })
             const prefixes = _.map(DEPARTMENTS || [], department => {
               const prefix = department.trim().padStart(2, '0')
               if (prefix !== '00' && /^\d{2}$/.test(prefix)) return prefix
             })
-            if (_.isEmpty(prefixes)) {
-              return
+            if (!_.isEmpty(prefixes)) {
+              const filteredStations = stations.filter(station => {
+                return prefixes.some(prefix => station.stationId.startsWith(prefix))
+              })
+              item.data = filteredStations
             }
-            const filteredStations = stations.filter(station => {
-              return prefixes.some(prefix => station.stationId.startsWith(prefix))
-            })
-            item.data = filteredStations
+            _.forEach(item.data, station => {
+              station.stationId = _.toNumber(station.stationId)
+            }) 
           }
         },
         log: (logger, item) => logger.info(`${item.data.length} stations found.`),
         convertToGeoJson: {
           longitude: 'Longitude',
           latitude: 'Latitude',
-          altitude: 'Altitude',
-          transform: { 
-            unitMapping: {
-              'properties.stationId': { asNumber: true }
-            }
-          }
+          altitude: 'Altitude'
         },
         updateMongoCollection: {
           collection: STATIONS_COLLECTION,
