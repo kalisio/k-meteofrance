@@ -6,6 +6,8 @@ const TOKEN = process.env.PAQUETOBS_TOKEN
 const OUTPUT_DIR = './output'
 const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
+const STATIONS = process.env.STATIONS && process.env.STATIONS.split(',')
+
 
 export default {
   id: 'paquetobs-stations',
@@ -42,22 +44,32 @@ export default {
         },
         apply: {
           function: (item) => {
-            const stations = item.data
-            // filters the stations based on the departments if required
+            let stations = item.data
+
+            let deptStations = []
             const prefixes = _.map(DEPARTMENTS || [], department => {
               const prefix = department.trim().padStart(2, '0')
               if (prefix !== '00' && /^\d{2}$/.test(prefix)) return prefix
             })
             if (!_.isEmpty(prefixes)) {
-              const filteredStations = stations.filter(station => {
-                return prefixes.some(prefix => station.stationId.startsWith(prefix))
-              })
-              item.data = filteredStations
+              deptStations = stations.filter(station =>
+                prefixes.some(prefix => (station.stationId).startsWith(prefix))
+              )
             }
-            // converts stationId to a number to improve performance
-            _.forEach(item.data, station => {
+            const stationIds = _.map(STATIONS || [], station => station.trim())
+            let specificStations = []
+            if (!_.isEmpty(stationIds)) {
+              specificStations = stations.filter(station =>
+                stationIds.includes((station.stationId))
+              )
+            }
+            if (!_.isEmpty(deptStations) || !_.isEmpty(specificStations)) {
+              stations = _.concat(specificStations, deptStations)
+            }
+            _.forEach(stations, station => {
               station.stationId = _.toNumber(station.stationId)
-            }) 
+            })
+            item.data = stations
           }
         },
         log: (logger, item) => logger.info(`${item.data.length} stations found.`),
