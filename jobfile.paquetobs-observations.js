@@ -7,7 +7,6 @@ const TOKEN = process.env.PAQUETOBS_TOKEN
 const TTL = +process.env.TTL || (7 * 24 * 60 * 60)  // duration in seconds
 const FREQUENCY = process.env.FREQUENCY || 'horaire'
 const LATENCY = +process.env.LATENCY || 0
-const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 const OUTPUT_DIR = './output'
 const MEASUREMENTS_COLLECTION = `mf-paquetobs-observations`
 const STATIONS_COLLECTION = 'mf-paquetobs-stations'
@@ -28,10 +27,9 @@ if (FREQUENCY === 'horaire') {
 const URL = `https://public-api.meteofrance.fr/public/DPPaquetObs/v1/paquet/stations/${FREQUENCY}?date=${DATE}&format=geojson`
 
 console.log('--------------------------------------------')
-console.log('FREQUENCY', FREQUENCY)
-console.log('LATENCY', LATENCY)
-console.log('DEPARTMENTS:', DEPARTMENTS)
-console.log('URL:', URL)
+console.log('FREQUENCY:', FREQUENCY)
+console.log('LATENCY:', LATENCY)
+console.log('URL::', URL)
 console.log('--------------------------------------------')
 
 export default {
@@ -101,6 +99,8 @@ export default {
                   _.set(observation, 'properties.precipitations', _.toNumber(record.properties.rr_per) * 10)
                 }
                 observations.push(observation)
+              } else {
+                console.log(`[!] skipping station ${record.properties.geo_id_insee}`)
               }
             }
             item.data = observations

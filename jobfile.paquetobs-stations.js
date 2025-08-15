@@ -8,6 +8,10 @@ const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 const STATIONS = process.env.STATIONS && process.env.STATIONS.split(',')
 
+console.log('--------------------------------------------')
+console.log('DEPARTMENTS:', DEPARTMENTS)
+console.log('STATIONS:', STATIONS)
+console.log('--------------------------------------------')
 
 export default {
   id: 'paquetobs-stations',
@@ -45,31 +49,31 @@ export default {
         apply: {
           function: (item) => {
             let stations = item.data
-
-            let deptStations = []
-            const prefixes = _.map(DEPARTMENTS || [], department => {
+            // filter by departments
+            let departmentStations = []
+            const departmentIds = _.map(DEPARTMENTS, department => {
               const prefix = department.trim().padStart(2, '0')
               if (prefix !== '00' && /^\d{2}$/.test(prefix)) return prefix
             })
-            if (!_.isEmpty(prefixes)) {
-              deptStations = stations.filter(station =>
-                prefixes.some(prefix => (station.stationId).startsWith(prefix))
+            if (!_.isEmpty(departmentIds)) {
+              departmentStations = stations.filter(station =>
+                departmentIds.some(prefix => (station.stationId).startsWith(prefix))
               )
             }
-            const stationIds = _.map(STATIONS || [], station => station.trim())
-            let specificStations = []
+            // filter by stations
+            let specificStations = []            
+            const stationIds = _.map(STATIONS, station => station.trim())
             if (!_.isEmpty(stationIds)) {
               specificStations = stations.filter(station =>
                 stationIds.includes((station.stationId))
               )
             }
-            if (!_.isEmpty(deptStations) || !_.isEmpty(specificStations)) {
-              stations = _.concat(specificStations, deptStations)
+            if (!_.isEmpty(departmentStations) || !_.isEmpty(specificStations)) {
+              item.data = _.concat(specificStations, departmentStations)
             }
-            _.forEach(stations, station => {
+            _.forEach(item.data, station => {
               station.stationId = _.toNumber(station.stationId)
             })
-            item.data = stations
           }
         },
         log: (logger, item) => logger.info(`${item.data.length} stations found.`),

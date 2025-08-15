@@ -28,7 +28,8 @@ The station data are stored in compliance with the **GeoJSON** standard.
 
 | Variable | Description |
 |--- | --- |
-| `DEPARTMENTS` | The list of departments used to filter the collected stations. |
+| `DEPARTMENTS` | The list of departments used to filter the collected observations, e.g, `"11,09,31"` |
+| `STATIONS` | The list of station ids used to filter the collected observations, e.g, `"09099001,09301001"` |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
 ### paquetobs-observations
@@ -52,7 +53,6 @@ The observation data are stored in compliance with the **GeoJSON** standard.
 |--- | --- |
 | `FREQUENCY` | The frequency of the observations to collect. It must be `horaire` or `infrahoraire-6m`. Default value is `horaire`. |
 | `LATENCY` | The latency of the observations to collect. It must be `horaire` or `infrahoraire-6m`. Default value is `horaire`. |
-| `DEPARTMENTS` | The list of departments used to filter the collected observations. |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
 ## Deployment
