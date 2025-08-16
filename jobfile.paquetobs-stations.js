@@ -1,17 +1,12 @@
 import winston from 'winston'
 import _ from 'lodash'
 
-const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/kano'
 const TOKEN = process.env.PAQUETOBS_TOKEN
-const OUTPUT_DIR = './output'
-const STATIONS_COLLECTION = 'mf-paquetobs-stations'
 const DEPARTMENTS = process.env.DEPARTMENTS && process.env.DEPARTMENTS.split(',')
 const STATIONS = process.env.STATIONS && process.env.STATIONS.split(',')
-
-console.log('--------------------------------------------')
-console.log('DEPARTMENTS:', DEPARTMENTS)
-console.log('STATIONS:', STATIONS)
-console.log('--------------------------------------------')
+const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/meteofrance'
+const STATIONS_COLLECTION = 'mf-paquetobs-stations'
+const OUTPUT_DIR = './output'
 
 export default {
   id: 'paquetobs-stations',
@@ -93,6 +88,10 @@ export default {
     },
     jobs: {
       before: {
+        printEnv: {
+          DEPARTMENTS: DEPARTMENTS,
+          STATIONS, STATIONS,
+        },
         createStores: [{
           id: 'memory'
         }, {
