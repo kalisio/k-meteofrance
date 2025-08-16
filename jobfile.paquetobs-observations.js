@@ -2,14 +2,14 @@ import _ from 'lodash'
 import moment from 'moment'
 import winston from 'winston'
 
-const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/kano'
 const TOKEN = process.env.PAQUETOBS_TOKEN
-const TTL = +process.env.TTL || (7 * 24 * 60 * 60)  // duration in seconds
 const FREQUENCY = process.env.FREQUENCY || 'horaire'
 const LATENCY = +process.env.LATENCY || 0
-const OUTPUT_DIR = './output'
+const TTL = +process.env.TTL || (7 * 24 * 60 * 60)  // duration in seconds
+const DB_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017/meteofrance'
 const MEASUREMENTS_COLLECTION = `mf-paquetobs-observations`
 const STATIONS_COLLECTION = 'mf-paquetobs-stations'
+const OUTPUT_DIR = './output'
 
 // compute date request according to current time
 let DATE = moment().utc().subtract(LATENCY, 'minutes')
@@ -24,13 +24,9 @@ if (FREQUENCY === 'horaire') {
   console.error('Undefined FREQUENCY', FREQUENCY)
   exit(1)
 }
-const URL = `https://public-api.meteofrance.fr/public/DPPaquetObs/v1/paquet/stations/${FREQUENCY}?date=${DATE}&format=geojson`
 
-console.log('--------------------------------------------')
-console.log('FREQUENCY:', FREQUENCY)
-console.log('LATENCY:', LATENCY)
-console.log('URL::', URL)
-console.log('--------------------------------------------')
+// compute the URL
+const URL = `https://public-api.meteofrance.fr/public/DPPaquetObs/v1/paquet/stations/${FREQUENCY}?date=${DATE}&format=geojson`
 
 export default {
   id: 'pquetobs-observations',
@@ -123,6 +119,11 @@ export default {
     },
     jobs: {
       before: {
+        printEnv: {
+          FREQUENCY: FREQUENCY,
+          LATENCY: LATENCY,
+          TTL: TTL
+        },
         createStores: [{
           id: 'memory'
         }, {
