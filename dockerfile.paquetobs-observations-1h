@@ -9,7 +9,6 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 # Default environment variables
 ENV CRON="0 * * * *"
 
-
 # Install the job
 COPY --chown=node:node jobfile.paquetobs-observations.js package.json yarn.lock /opt/job/
 WORKDIR /opt/job
