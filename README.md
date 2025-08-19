@@ -28,8 +28,10 @@ The station data are stored in compliance with the **GeoJSON** standard.
 
 | Variable | Description |
 |--- | --- |
+| `PAQUETOBS_TOKEN` | The token to use the **paquetobs** API |
 | `DEPARTMENTS` | The list of departments used to filter the collected observations, e.g, `"11,09,31"` |
 | `STATIONS` | The list of station ids used to filter the collected observations, e.g, `"09099001,09301001"` |
+| `DB_URL` | the database url. By default: `mongodb://localhost:27017/meteofrance`. |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
 ### paquetobs-observations
@@ -51,8 +53,11 @@ The observation data are stored in compliance with the **GeoJSON** standard.
 
 | Variable | Description |
 |--- | --- |
+| `PAQUETOBS_TOKEN` | The **paquetobs** API token. |
 | `FREQUENCY` | The frequency of the observations to collect. It must be `horaire` or `infrahoraire-6m`. Default value is `horaire`. |
 | `LATENCY` | The latency of the observations to collect. It must be `horaire` or `infrahoraire-6m`. Default value is `horaire`. |
+| `TTL` | The retention period in seconds of the data. By default: `7 * 24 * 60 * 60` (~7 days) |
+| `DB_URL` | the database url. By default: `mongodb://localhost:27017/meteofrance`. |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
 ## Deployment
