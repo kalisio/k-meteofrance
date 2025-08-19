@@ -36,7 +36,7 @@ export default {
     faultTolerant: true,
   },
   tasks: [{
-    id: `paquetobs/observations-${DATE}`,
+    id: `paquetobs-observations-${DATE}`,
     type: 'http',
     options: {
       url: URL,

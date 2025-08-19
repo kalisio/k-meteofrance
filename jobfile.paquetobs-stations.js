@@ -16,7 +16,7 @@ export default {
     faultTolerant: true,
   },
   tasks: [{
-    id: 'paquetobs/stations',
+    id: 'paquetobs-stations',
     type: 'http',
     options: {
       url: 'https://public-api.meteofrance.fr/public/DPPaquetObs/v1/liste-stations',
