@@ -89,8 +89,8 @@ export default {
     jobs: {
       before: {
         printEnv: {
-          DEPARTMENTS: DEPARTMENTS,
-          STATIONS, STATIONS,
+          DEPARTMENTS,
+          STATIONS,
         },
         createStores: [{
           id: 'memory'
