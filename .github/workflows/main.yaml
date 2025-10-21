@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        variant: [ paquetobs-stations, paquetobs-observations-1h, paquetobs-observations-6m ]
+        variant: [ paquetobs-stations, paquetobs-observations-1h, paquetobs-observations-6m, arpege-europe, arpege-world ]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
