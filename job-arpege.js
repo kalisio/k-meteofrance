@@ -63,10 +63,19 @@ export default (options) => {
         after: {
         },
         error: {
-          log: (logger, item) => {
+          log: async (logger, item) => {
             let errors = []
             if (_.has(item, 'error')) errors = _.get(item, 'error.errors', [_.get(item, 'error')])
             logger.error(`Failed processing ${item.id}: ${errors}`)
+            const statusCode = _.get(item, 'error.statusCode')
+            if (statusCode === 404) {
+              logger.warn(`[WARN] 404 on task ${item.id} → waiting 15s before continuing...`)
+              await new Promise(resolve => setTimeout(resolve, 15000))
+            }
+            if (statusCode === 429) {
+              logger.error('[ERROR] 429 (rate limit) → rate limit reached, stopping job to avoid ban')
+              process.exit(1)
+            }
           }
         }
       },
