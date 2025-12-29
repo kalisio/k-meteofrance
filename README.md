@@ -2,6 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/tag/kalisio/k-meteofrance?sort=semver&label=latest)](https://github.com/kalisio/k-meteofrance/releases)
 [![CI](https://github.com/kalisio/k-meteofrance/actions/workflows/main.yaml/badge.svg)](https://github.com/kalisio/k-meteofrance/actions/workflows/main.yaml)
+[![Quality Gate Status](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-k-meteofrance&metric=alert_status&token=sqb_caf6d151cc333b833197900ac8662f5935a32d2d)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-k-meteofrance)
 [![Maintainability Issues](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-k-meteofrance&metric=software_quality_maintainability_issues&token=sqb_caf6d151cc333b833197900ac8662f5935a32d2d)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-k-meteofrance)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
