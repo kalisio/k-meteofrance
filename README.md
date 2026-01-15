@@ -10,7 +10,7 @@ A [Krawler](https://kalisio.github.io/krawler/) based service to download divers
 
 ## paquetobs
 
-The **paquetobs** job files enable the scraping of [real-time observations](https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=93&id_rubrique=32) from all weather 
+The **paquetobs** job files enable the scraping of [real-time observations](https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=93&id_rubrique=32) from all weather
 stations of the French network at hourly and/or sub-hourly intervals (every 6 minutes). These data are exposed by the public API [Package Observations](https://portail-api.meteofrance.fr/web/fr/api/DonneesPubliquesPaquetObservation).
 
 This repository provides with 2 jobs:
@@ -70,12 +70,10 @@ We personally use [Kargo](https://kalisio.github.io/kargo/) to deploy the servic
 
 Please refer to [contribution section](./CONTRIBUTING.md) for more details.
 
-## Authors
-
-This project is sponsored by 
-
-![Kalisio](https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png)
-
 ## License
 
-This project is licensed under the MIT License - see the [license file](./LICENSE) for details
+Licensed under the [MIT license](LICENSE).
+
+Copyright (c) 2017-20xx [Kalisio](https://kalisio.com)
+
+[![Kalisio](https://kalisio.github.io/kalisioscope/kalisio/kalisio-logo-black-256x84.png)](https://kalisio.com)
