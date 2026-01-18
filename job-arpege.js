@@ -6,21 +6,32 @@ import moment from 'moment'
 // Job configuration
 const outputDir = './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
-const url = 'https://public-api.meteofrance.fr/previnum/DPPaquetARPEGE/v1/productARP'
-const token = process.env.ARPEGE_TOKEN
+const dataSource = process.env.DATA_SOURCE || 'meteofrance'
+const meteofranceArpegeToken = process.env.ARPEGE_TOKEN
+const meteofranceUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetARPEGE/v1/productARP'
+const dataGouvUrl = 'https://object.files.data.gouv.fr/meteofrance-pnt/pnt'
 
 // Register generateTasks hook
 const generateTasks = (options) => {
   return function (hook) {
-    const { format, runTimes, packages, forecastTimes } = options
+    const { format, resolution, runTimes, packages, forecastTimes } = options
     const tasks = []
     for (const runTime of runTimes) {
       const referencetime = moment().utc().startOf('day').add(moment.duration(runTime)).format('YYYY-MM-DDTHH:mm:ss[Z]')
       for (const pkg of packages) {
         for (const time of forecastTimes) {
-          tasks.push({
-            referencetime, package: pkg, time, id: `${referencetime}${time}${pkg}.${format}`
-          })
+          const task = { referencetime, package: pkg, time, id: `${referencetime}${time}${pkg}.${format}` }
+          if (dataSource === 'data-gouv') {
+            task.url = [
+              dataGouvUrl,
+              referencetime,
+              'arpege',
+              resolution,
+              pkg,
+              `arpege__${resolution}__${pkg}__${time}__${referencetime}.${format}`
+            ].join('/')
+          }
+          tasks.push(task)
         }
       }
     }
@@ -31,7 +42,8 @@ const generateTasks = (options) => {
 hooks.registerHook('generateTasks', generateTasks)
 
 export default (options) => {
-  const { id, format, grid } = options
+  const { id, format, resolution } = options
+
   return {
     id,
     store: 'fs',
@@ -42,18 +54,24 @@ export default (options) => {
     taskTemplate: {
       id: '<%= taskId %>',
       type: 'http',
-      options: {
-        url,
-        grid,
-        format,
-        referencetime: '<%= referencetime %>',
-        package: '<%= package %>',
-        time: '<%= time %>',
-        headers: {
-          accept: '*/*',
-          apikey: token
+      options: dataSource === 'data-gouv'
+        ? { 
+          // -------- DATA.GOUV --------
+          url: '<%= url %>'
         }
-      }
+        : { 
+          // -------- METEOFRANCE --------
+          url: meteofranceUrl,
+          grid: resolution,
+          format,
+          referencetime: '<%= referencetime %>',
+          package: '<%= package %>',
+          time: '<%= time %>',
+          headers: {
+            accept: '*/*',
+            apikey: meteofranceArpegeToken
+          }
+        }
     },
     hooks: {
       tasks: {

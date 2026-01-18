@@ -1,8 +1,10 @@
 import createJob from './job-arpege.js'
 
+const dataSource = process.env.DATA_SOURCE || 'meteofrance'
+
 export default createJob({
-  id: 'arpege-europe',
-  grid: 0.1,
+  id: `arpege-europe-${dataSource}`,
+  resolution: dataSource === 'data-gouv' ? '01' : '0.1',
   format: 'grib2',
   runTimes: ['00:00:00', '06:00:00', '12:00:00', '18:00:00'],
   packages: ['HP1', 'HP2', 'IP1', 'IP2', 'IP3', 'IP4', 'SP1', 'SP2'],
