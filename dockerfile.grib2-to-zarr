@@ -10,9 +10,9 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 ENV CRON="0 21 * * *"
 
 # Install the job
-COPY --chown=node:node job-arpege.js jobfile-arpege-world.js utils.js package.json yarn.lock /opt/job/
+COPY --chown=node:node jobfile-grib2-to-zarr.js package.json yarn.lock /opt/job/
 WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 
 # Run the job
-CMD krawler --cron "$CRON" jobfile.arpege-world.js
+CMD krawler --cron "$CRON" jobfile-grib2-to-zarr.js
