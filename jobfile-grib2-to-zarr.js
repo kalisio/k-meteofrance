@@ -5,7 +5,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Job configuration
-const outputDir = './output'
+const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
 
 // Register generateTasks hook

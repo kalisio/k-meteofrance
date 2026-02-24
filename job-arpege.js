@@ -7,7 +7,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Job configuration
-const outputDir = './output'
+const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
 const dataSource = process.env.DATA_SOURCE || 'meteofrance'
 const meteofranceArpegeToken = process.env.ARPEGE_TOKEN
