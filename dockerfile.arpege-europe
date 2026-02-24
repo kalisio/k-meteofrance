@@ -15,4 +15,4 @@ WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 
 # Run the job
-CMD krawler --cron "$CRON" jobfile.arpege-europe.js
+CMD krawler --cron "$CRON" jobfile-arpege-europe.js
