@@ -1,5 +1,8 @@
 ARG KRAWLER_TAG
 
+### Get conversion tool for generating Zarr
+FROM kalisio/kazarr-conversion-tool:latest AS conversion-tool
+
 # 
 # Make a Krawler image alias to be able to take into account the KRAWLER_TAG argument
 #
@@ -9,8 +12,16 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 # Default environment variables
 ENV CRON="0 21 * * *"
 
+### Get conversion tool executable from the conversion tool image
+COPY --from=conversion-tool /app/dist/conversion_tool /opt/job/conversion_tool
+
+### Fix permissions 
+USER root
+RUN chown -R node:node /opt/job
+USER node
+
 # Install the job
-COPY --chown=node:node jobfile-grib2-to-zarr.js package.json yarn.lock /opt/job/
+COPY --chown=node:node jobfile-grib2-to-zarr.js package.json yarn.lock templates.json /opt/job/
 WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 

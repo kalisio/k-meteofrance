@@ -22,8 +22,8 @@ const generateTasks = (options) => {
     const tasks = []
     const referencetimes = getReferenceTimes(runTimes, oldestRunIntervalMs)
     for (const referencetime of referencetimes) {
+      const folder = `${id}_${resolution}_${referencetime}`
       for (const pkg of packages) {
-        const folder = `${id}_${resolution}_${pkg}_${referencetime}`
         for (const time of forecastTimes) {
           const id = `${folder}/${pkg}-${time}`
           // Skip this file if it has already been successfully downloaded

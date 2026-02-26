@@ -7,6 +7,7 @@ import path from 'path'
 // Job configuration
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
+const model = process.env.MODEL || 'arpege'
 
 // Register generateTasks hook
 const generateTasks = () => {
@@ -22,7 +23,7 @@ const generateTasks = () => {
       const hasGrib2 = filesInFolder.some(file => file.endsWith('.grib2'))
 			// Check if there is a DONE.txt file
       const hasDoneFile = filesInFolder.includes('DONE.txt')
-			if (hasGrib2 && !hasDoneFile) tasks.push({ id: folderFullPath })
+			if (hasGrib2 && !hasDoneFile) tasks.push({ id: folderFullPath, folderName })
 		}	
 		hook.data.tasks = tasks
 		return hook
@@ -52,11 +53,12 @@ export default {
           hook: 'runCommand',
 					// TODO 
 					// convert grib2 to zaar only files with a .grib2 extension and add a Done.txt file if all files are present ( can be done via an env)
-          command: 'echo TODO',
+          command: `./conversion_tool new-dataset --templates-path ../templates.json -t ${model} --data-mapping cells -c "{\"version\": 2}" -o s3://mf/tests/s3/${item.folderName}.zarr dummy-id ${item.id}`,
 					stdout: true,
         }
       }
     },
+
     jobs: {
       before: {
 				createStores: {
