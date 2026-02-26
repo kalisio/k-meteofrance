@@ -54,6 +54,7 @@ export default {
           hook: 'runCommand',
           command: `./conversion_tool new-dataset --templates-path ./templates.json -t ${model} --data-mapping cells -c '{\"version\": 2}' -o s3://mf/tests/s3/<%= folderName %>.zarr dummy-id <%= id %>`,
 					stdout: true,
+					stderr: true
         }
       }
     },
