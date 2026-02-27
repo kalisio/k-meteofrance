@@ -12,7 +12,12 @@
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
           "discriminator": ["IP1", "IP2", "IP3", "IP4"],
           "rename_before_merge": [{}, {}, {}, {"z": "z_IP4"}],
-          "dataset_backend_kwargs": [{}, {}, {}, {"filter_by_keys": {"shortName": "z"}}]
+          "dataset_backend_kwargs": [
+            {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
+            {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
+            {"filter_by_keys": {"shortName": ["clwc", "tke"]}},
+            {"filter_by_keys": {"shortName": ["z"]}}
+          ]
         }},
         { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "z_IP4", "t", "wdir", "ws", "w", "clwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
@@ -43,7 +48,11 @@
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
           "discriminator": ["IP1", "IP2", "IP3", "IP4"],
-          "dataset_backend_kwargs": [{}, {}, {}, {"filter_by_keys": {"shortName": "tke"}}]
+          "dataset_backend_kwargs": [
+            {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
+            {"filter_by_keys": {"shortName": ["clwc"]}},
+            {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
+            {"filter_by_keys": {"shortName": "tke"}}]
         }},
         { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
