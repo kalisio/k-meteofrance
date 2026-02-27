@@ -6,7 +6,7 @@ import path from 'path'
 
 // Job configuration
 const outputDir = process.env.OUTPUT_DIR || './output'
-const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
+const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const model = process.env.MODEL || 'arpege'
 
 // Register generateTasks hook
