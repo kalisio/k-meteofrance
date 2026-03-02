@@ -12,11 +12,16 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 # Default environment variables
 ENV CRON="0 21 * * *"
 
-### Get conversion tool executable from the conversion tool image
+# Get conversion tool executable from the conversion tool image
 COPY --from=conversion-tool /app/dist/conversion_tool /opt/job/conversion_tool
 
-### Fix permissions 
+# Fix permissions 
 USER root
+# Install Python
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    ln -s /usr/bin/python3 /usr/bin/python
+# Change of ownership
 RUN chown -R node:node /opt/job
 USER node
 
