@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import winston from 'winston'
 import { hooks } from  '@kalisio/krawler'
+import { getEnvArray } from './utils.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -9,30 +10,51 @@ const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const model = process.env.MODEL || 'arpege'
 const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 's3://mf/tests/s3/'
+const packages = getEnvArray('PACKAGES', ['HP1', 'HP2', 'IP1', 'IP2', 'IP3', 'IP4', 'SP1', 'SP2'])
+const forecastTimes = getEnvArray('FORECAST_TIMES', ['000H012H', '013H024H', '025H036H', '037H048H', '049H060H', '061H072H', '073H084H', '085H096H', '097H102H', '000H024H', '025H048H', '049H072H', '073H102H'])
 
 // Register generateTasks hook
 const generateTasks = () => {
 	return function (hook) {
 		const directoryEntries = fs.readdirSync(outputDir, { withFileTypes: true })
+    // Build expected filenames
+    const expectedFiles = []
+    for (const pkg of packages) {
+      for (const forecastTime of forecastTimes) {
+        expectedFiles.push(`${pkg}-${forecastTime}.grib2`)
+      }
+    }
 		const tasks = []
 		for (const entry of directoryEntries) {
 			const folderName = entry.name
 			const folderFullPath = path.join(outputDir, folderName)
-			// List the contents of the folder
+			// Read all files in the current folder
 			const filesInFolder = fs.readdirSync(folderFullPath)
-			// Check if there is a .grib2 file
-      const hasGrib2 = filesInFolder.some(file => file.endsWith('.grib2'))
-			// Check if there is a DONE.txt file
+      // Check for GRIB2 files and DONE.txt
+      const gribFiles = filesInFolder.filter(file => file.endsWith('.grib2'))
+      const hasGrib2 = gribFiles.length > 0
       const hasDoneFile = filesInFolder.includes('DONE.txt')
+      if (hasDoneFile) continue
+      // If folder has GRIB2 files but no DONE.txt, create a task
 			if (hasGrib2 && !hasDoneFile) tasks.push({ id: folderFullPath, folderName })
-		}	
+      // Check if folder contains all expected GRIB2 files and no extra files
+      const hasExactCount = gribFiles.length === expectedFiles.length
+      const hasAllExpected = expectedFiles.every(file => gribFiles.includes(file))
+      const hasNoExtraFiles = gribFiles.every(file => expectedFiles.includes(file))
+      const isComplete = hasExactCount && hasAllExpected && hasNoExtraFiles
+      // Mark folder as completed if all files are present
+      if (isComplete) {
+        const doneFilePath = path.join(folderFullPath, 'DONE.txt')
+        fs.writeFileSync(doneFilePath, 'COMPLETED\n')
+      }
+		}
+    // Attach the generated tasks to the hook
 		hook.data.tasks = tasks
 		return hook
 	}
 }
 hooks.registerHook('generateTasks', generateTasks)
 
-// TODO : done.txt file
 export default {
   id: 'grib2-to-zarr',
   store: 'fs',
@@ -67,7 +89,6 @@ export default {
         }
       }
     },
-
     jobs: {
       before: {
 				createStores: {
