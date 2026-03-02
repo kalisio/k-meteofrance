@@ -32,7 +32,8 @@
           "tke": "turbulentKineticEnergy"
         } } },
         "unify_chunks",
-        "save"
+        "save",
+        "clean"
       ]
     }
   },
@@ -66,7 +67,8 @@
           "tke": "turbulentKineticEnergy"
         } } },
         "unify_chunks",
-        "save"
+        "save",
+        "clean"
       ]
     }
   }

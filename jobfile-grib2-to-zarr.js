@@ -8,6 +8,7 @@ import path from 'path'
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const model = process.env.MODEL || 'arpege'
+const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 's3://mf/tests/s3/'
 
 // Register generateTasks hook
 const generateTasks = () => {
@@ -52,7 +53,15 @@ export default {
       after: {
         grib2ToZarr: {
           hook: 'runCommand',
-          command: `./conversion_tool new-dataset --templates-path ./templates.json -t ${model} --data-mapping cells -c '{\"version\": 2}' -o s3://mf/tests/s3/<%= folderName %>.zarr dummy-id <%= id %>`,
+          command: [
+						'python ./conversion_tool/main.py new-dataset', 
+						'--templates-path ./templates.json', 
+						`-t ${model}`, 
+						'--data-mapping cells', 
+						"-c '{\"version\": 2}'", 
+						`-o ${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(.+)$/, "$1/$2/$3") %>.zarr`, 
+						'dummy-id <%= id %>'
+					].join(' '),
 					stdout: true,
 					stderr: true
         }
