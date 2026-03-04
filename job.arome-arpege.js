@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import winston from 'winston'
 import { hooks } from  '@kalisio/krawler'
-import { getReferenceTimes } from './utils.js'
 import moment from 'moment'
 import fs from 'fs'
 import path from 'path'
@@ -10,17 +9,55 @@ import path from 'path'
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
 const dataSource = process.env.DATA_SOURCE || 'meteofrance'
-const meteofranceArpegeToken = process.env.ARPEGE_TOKEN
-const meteofranceUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetARPEGE/v1/productARP'
+const meteofranceAromeUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetAROME/v1/productARO'
+const meteofranceArpegeUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetARPEGE/v1/productARP'
 const dataGouvUrl = 'https://object.files.data.gouv.fr/meteofrance-pnt/pnt'
+const meteofranceAromeToken = process.env.AROME_TOKEN
+const meteofranceArpegeToken = process.env.ARPEGE_TOKEN
+// Don't go back in time older than 1 day
+const oldestRunIntervalMs = (process.env.OLDEST_RUN_INTERVAL_MS ? Number(process.env.OLDEST_RUN_INTERVAL) : 24 * 3600 * 1000)
+
+// Utility functions
+function getReferenceTimes (runTimes) {
+  const now = moment().utc()
+  const referenceTimes = []
+  // Calculate how many days we must look back + margin
+  const daysBack = Math.ceil(oldestRunIntervalMs / 86400000) + 1
+  // Loop through each day
+  for (let dayOffset = 0; dayOffset <= daysBack; dayOffset++) {
+    // Get the start of that day
+    const day = moment(now).utc().startOf('day').subtract(dayOffset, 'days')
+    for (const runTime of runTimes) {
+      // Build the full datetime by adding 
+      const time = moment(day).add(moment.duration(runTime))
+      // Compute how old this run time is compared to now
+      const age = now.diff(time)
+      // Keep it only if it is in the past and inside the allowed interval
+      if (age >= 0 && age <= oldestRunIntervalMs) referenceTimes.push(time.format('YYYY-MM-DDTHH:mm:ss[Z]'))
+    }
+  }
+
+  return referenceTimes
+}
+function getEnvArray (key, defaults) {
+  if (_.isUndefined(process.env[key]) || _.isEmpty(process.env[key])) return defaults
+  // Transform comma-separated string into array
+  const values = process.env[key].split(',').map(value => value.trim())
+  // check if every value is in the default array
+  if (!_.every(values, value => _.includes(defaults, value))) return defaults
+  return values
+}
 
 // Register generateTasks hook
 const generateTasks = (options) => {
   return function (hook) {
-    const { id, format, resolution, runTimes, packages, forecastTimes, oldestRunIntervalMs } = options
+    const { id, type, format, resolution, defaultRunTimes, defaultPackages, defaultPorecastTimes } = options
     const alreadyProcessed = _.get(hook, 'data.taskTemplate.alreadyProcessed', [])
     const tasks = []
-    const referencetimes = getReferenceTimes(runTimes, oldestRunIntervalMs)
+    const runTimes = getEnvArray('RUN_TIMES', defaultRunTimes)
+    const packages = getEnvArray('PACKAGES', defaultPackages)
+    const forecastTimes = getEnvArray('FORECAST_TIMES', defaultPorecastTimes)
+    const referencetimes = getReferenceTimes(runTimes)
     for (const referencetime of referencetimes) {
       const folder = `${id}_${resolution}_${referencetime}`
       for (const pkg of packages) {
@@ -28,15 +65,15 @@ const generateTasks = (options) => {
           const id = `${folder}/${pkg}-${time}`
           // Skip this file if it has already been successfully downloaded
           if (_.includes(alreadyProcessed, id)) continue
-          const task = { referencetime, package: pkg, time, id }
+          const task = { referencetime, package: pkg, time, id, format }
           if (dataSource === 'data-gouv') {
             task.url = [
               dataGouvUrl,
               referencetime,
-              'arpege',
+              type,
               resolution,
               pkg,
-              `arpege__${resolution}__${pkg}__${time}__${referencetime}.${format}`
+              `${type}__${resolution}__${pkg}__${time}__${referencetime}.${format}`
             ].join('/')
           }
           tasks.push(task)
@@ -50,7 +87,10 @@ const generateTasks = (options) => {
 hooks.registerHook('generateTasks', generateTasks)
 
 export default (options) => {
-  const { id, format, resolution } = options
+  const { type, id, format, resolution } = options
+
+  const meteofranceUrl = type === 'arome' ? meteofranceAromeUrl : meteofranceArpegeUrl
+  const meteofranceToken = type === 'arome' ? meteofranceAromeToken : meteofranceArpegeToken
 
   return {
     id,
@@ -77,7 +117,7 @@ export default (options) => {
           time: '<%= time %>',
           headers: {
             accept: '*/*',
-            apikey: meteofranceArpegeToken
+            apikey: meteofranceToken
           }
         }
     },
@@ -90,9 +130,9 @@ export default (options) => {
           apply: {
             // Rename file (download without extension → rename to final name after success)
             function: (item) => {
-              const { id, options, logger } = item
+              const { id, logger, format } = item
               const oldPath = path.join(outputDir, id)
-              if (fs.existsSync(oldPath)) fs.renameSync(oldPath, `${oldPath}.${options.format}`)
+              if (fs.existsSync(oldPath)) fs.renameSync(oldPath, `${oldPath}.${format}`)
               logger.info(`Task ${id} finished`)
             }
           }
@@ -136,7 +176,7 @@ export default (options) => {
           cleanOldData: {
             hook: 'apply',
             function: (item) => {
-              const { oldestRunIntervalMs, format } = options
+              const { format } = options
               const alreadyProcessed = []
               const now = moment.utc()
               const oldestAllowedTime = now.clone().subtract(oldestRunIntervalMs, 'milliseconds')

@@ -26,7 +26,7 @@ RUN chown -R node:node /opt/job
 USER node
 
 # Install the job
-COPY --chown=node:node jobfile.grib2-to-zarr.js utils.js package.json yarn.lock templates.json /opt/job/
+COPY --chown=node:node jobfile.grib2-to-zarr.js package.json yarn.lock templates.json /opt/job/
 WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 

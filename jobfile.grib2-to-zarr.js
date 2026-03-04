@@ -1,17 +1,22 @@
 import _ from 'lodash'
 import winston from 'winston'
 import { hooks } from  '@kalisio/krawler'
-import { getEnvArray } from './utils.js'
 import fs from 'fs'
 import path from 'path'
+
+function getEnvArray (key) {
+  if (_.isUndefined(process.env[key]) || _.isEmpty(process.env[key])) return []
+  // Transform comma-separated string into array
+  return process.env[key].split(',').map(value => value.trim())
+}
 
 // Job configuration
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const model = process.env.MODEL || 'arpege'
 const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 's3://mf/tests/s3/'
-const packages = getEnvArray('PACKAGES', ['HP1', 'HP2', 'IP1', 'IP2', 'IP3', 'IP4', 'SP1', 'SP2'])
-const forecastTimes = getEnvArray('FORECAST_TIMES', ['000H012H', '013H024H', '025H036H', '037H048H', '049H060H', '061H072H', '073H084H', '085H096H', '097H102H', '000H024H', '025H048H', '049H072H', '073H102H'])
+const packages = getEnvArray('PACKAGES')
+const forecastTimes = getEnvArray('FORECAST_TIMES')
 
 // Register generateTasks hook
 const generateTasks = () => {
