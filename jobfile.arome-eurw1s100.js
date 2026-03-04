@@ -9,7 +9,7 @@ export default createJob({
   type: 'arome',
   defaultRunTimes: ['00:00:00','03:00:00','06:00:00','09:00:00','12:00:00','15:00:00','18:00:00','21:00:00'],
   defaultPackages: ['SP1','SP2','SP3','HP1'],
-  defaultPorecastTimes: [
+  defaultForecastTimes: [
     '00H','01H','02H','03H','04H','05H','06H','07H','08H','09H',
     '10H','11H','12H','13H','14H','15H','16H','17H','18H','19H',
     '20H','21H','22H','23H','24H','25H','26H','27H','28H','29H',

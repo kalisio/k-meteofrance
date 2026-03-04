@@ -9,5 +9,5 @@ export default createJob({
   format: 'grib2',
   defaultRunTimes:  ['00:00:00', '06:00:00', '12:00:00', '18:00:00'],
   defaultPackages: ['HP1', 'HP2', 'IP1', 'IP2', 'IP3', 'IP4', 'SP1', 'SP2'],
-  defaultPorecastTimes: ['000H012H', '013H024H', '025H036H', '037H048H', '049H060H', '061H072H', '073H084H', '085H096H', '097H102H']
+  defaultForecastTimes: ['000H012H', '013H024H', '025H036H', '037H048H', '049H060H', '061H072H', '073H084H', '085H096H', '097H102H']
 })

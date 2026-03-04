@@ -51,12 +51,12 @@ function getEnvArray (key, defaults) {
 // Register generateTasks hook
 const generateTasks = (options) => {
   return function (hook) {
-    const { id, type, format, resolution, defaultRunTimes, defaultPackages, defaultPorecastTimes } = options
+    const { id, type, format, resolution, defaultRunTimes, defaultPackages, defaultForecastTimes } = options
     const alreadyProcessed = _.get(hook, 'data.taskTemplate.alreadyProcessed', [])
     const tasks = []
     const runTimes = getEnvArray('RUN_TIMES', defaultRunTimes)
     const packages = getEnvArray('PACKAGES', defaultPackages)
-    const forecastTimes = getEnvArray('FORECAST_TIMES', defaultPorecastTimes)
+    const forecastTimes = getEnvArray('FORECAST_TIMES', defaultForecastTimes)
     const referencetimes = getReferenceTimes(runTimes)
     for (const referencetime of referencetimes) {
       const folder = `${id}_${resolution}_${referencetime}`
