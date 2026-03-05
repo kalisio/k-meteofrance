@@ -62,6 +62,44 @@ The observation data are stored in compliance with the **GeoJSON** standard.
 | `DB_URL` | the database url. By default: `mongodb://localhost:27017/meteofrance`. |
 | `DEBUG` | Enables debug output. Set it to `krawler*` to enable full output. By default it is undefined. |
 
+## Forecast Pipeline (AROME / ARPEGE)
+
+This repository implements a two-stage pipeline for forecast models:
+
+![forecast-pipeline](./docs/forecast-pipeline.svg)
+
+### Description
+
+These jobs download forecast data from the public Météo-France API:
+
+* **[AROME](https://portail-api.meteofrance.fr/web/fr/api/PaquetAROME)** – High-resolution regional model focused on France and Western Europe
+* **[ARPEGE](https://portail-api.meteofrance.fr/web/fr/api/PaquetARPEGE)** – Global model
+
+Files are retrieved in **GRIB2** format.
+
+### Available Jobs
+
+| Job | Type | Resolution | Coverage |
+|---|---|---|---|
+| `arome-france` | AROME | 0.025° | France |
+| `arome-france-high` | AROME | 0.01° | France |
+| `arpege-europe` | ARPEGE | 0.1° | Europe |
+| `arpege-world` | ARPEGE | 0.25° | Global |
+
+### Configuration
+
+| Variable | Description |
+|----------|----------|
+| `DATA_SOURCE` | Source of the data (`meteofrance` or `data-gouv`)  |
+| `AROME_TOKEN` | API token for AROME |
+| `ARPEGE_TOKEN` | API token for ARPEGE |
+| `OUTPUT_DIR` | Base directory for downloaded files |
+| `WORKERS_LIMIT` | Maximum number of concurrent downloads |
+| `OLDEST_RUN_INTERVAL_MS` | Max allowed run age |
+| `RUN_TIMES` | Override model run times |
+| `PACKAGES` | Override packages |
+| `FORECAST_TIMES` | Override forecast steps |
+
 ## Deployment
 
 We personally use [Kargo](https://kalisio.github.io/kargo/) to deploy the service.
