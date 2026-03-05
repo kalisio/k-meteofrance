@@ -72,7 +72,7 @@ This repository implements a two-stage pipeline for forecast models:
 
 These jobs download forecast data from the public Météo-France API:
 
-* **[AROME](https://portail-api.meteofrance.fr/web/fr/api/PaquetAROME)** – High-resolution regional model focused on France and Western Europe
+* **[AROME](https://portail-api.meteofrance.fr/web/fr/api/PaquetAROME)** – High-resolution regional model
 * **[ARPEGE](https://portail-api.meteofrance.fr/web/fr/api/PaquetARPEGE)** – Global model
 
 Files are retrieved in **GRIB2** format.

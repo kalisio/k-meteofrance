@@ -43,12 +43,10 @@ const generateTasks = () => {
       // If folder has GRIB2 files but no DONE.txt, create a task
 			if (hasGrib2 && !hasDoneFile) tasks.push({ id: folderFullPath, folderName })
       // Check if folder contains all expected GRIB2 files and no extra files
-      const hasExactCount = gribFiles.length === expectedFiles.length
       const hasAllExpected = expectedFiles.every(file => gribFiles.includes(file))
       const hasNoExtraFiles = gribFiles.every(file => expectedFiles.includes(file))
-      const isComplete = hasExactCount && hasAllExpected && hasNoExtraFiles
       // Mark folder as completed if all files are present
-      if (isComplete) {
+      if (gribFiles.length === expectedFiles.length  && hasAllExpected && hasNoExtraFiles) {
         const doneFilePath = path.join(folderFullPath, 'DONE.txt')
         fs.writeFileSync(doneFilePath, 'COMPLETED\n')
       }
