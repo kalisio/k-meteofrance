@@ -3,7 +3,7 @@ import createJob from './job.arome-arpege.js'
 const dataSource = process.env.DATA_SOURCE || 'meteofrance'
 
 export default createJob({
-  id: `arome-eurw1s100-${dataSource}`,
+  id: `arome-france-high-${dataSource}`,
   resolution: dataSource === 'data-gouv' ? '001' : '0.01',
   format: 'grib2',
   type: 'arome',

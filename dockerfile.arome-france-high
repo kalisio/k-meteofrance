@@ -10,9 +10,9 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 ENV CRON="0 23 * * *"
 
 # Install the job
-COPY --chown=node:node job.arome-arpege.js jobfile.arome-eurw1s100.js package.json yarn.lock /opt/job/
+COPY --chown=node:node job.arome-arpege.js jobfile.arome-france-high.js package.json yarn.lock /opt/job/
 WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 
 # Run the job
-CMD krawler --cron "$CRON" jobfile.arome-eurw1s100.js
+CMD krawler --cron "$CRON" jobfile.arome-france-high.js

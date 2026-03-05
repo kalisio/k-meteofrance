@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        variant: [ paquetobs-stations, paquetobs-observations-1h, paquetobs-observations-6m, arpege-europe, arpege-world, grib2-to-zarr, arome-eurw1s40, arome-eurw1s100]
+        variant: [ paquetobs-stations, paquetobs-observations-1h, paquetobs-observations-6m, arpege-europe, arpege-world, grib2-to-zarr, arome-france-high, arome-france]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
