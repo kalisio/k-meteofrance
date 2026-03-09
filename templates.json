@@ -10,7 +10,7 @@
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
-          "discriminator": ["arpege*IP1", "arpege*IP2", "arpege*IP3", "arpege*IP4"],
+          "discriminator": ["IP1", "IP2", "IP3", "IP4"],
           "rename_before_merge": [{}, {}, {}, {"z": "z_IP4"}],
           "dataset_backend_kwargs": [
             {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
@@ -48,7 +48,7 @@
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
-          "discriminator": ["arome*IP1", "arome*IP2", "arome*IP3", "arome*IP4"],
+          "discriminator": ["IP1", "IP2", "IP3", "IP4"],
           "dataset_backend_kwargs": [
             {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
             {"filter_by_keys": {"shortName": ["clwc"]}},
