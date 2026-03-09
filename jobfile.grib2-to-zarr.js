@@ -79,7 +79,7 @@ export default {
         grib2ToZarr: {
           hook: 'runCommand',
           command: [
-						'python ./conversion_tool/main.py new-dataset', 
+						'./conversion_tool new-dataset', 
 						'--templates-path ./templates.json', 
 						`-t ${model}`, 
 						'--data-mapping cells', 
