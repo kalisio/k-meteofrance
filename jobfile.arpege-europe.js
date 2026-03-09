@@ -5,7 +5,7 @@ const dataSource = process.env.DATA_SOURCE || 'meteofrance'
 export default createJob({
   id: `arpege-europe-${dataSource}`,
   resolution: dataSource === 'data-gouv' ? '01' : '0.1',
-  type: 'arpege',
+  model: 'arpege',
   format: 'grib2',
   defaultRunTimes:  ['00:00:00', '06:00:00', '12:00:00', '18:00:00'],
   defaultPackages: ['HP1', 'HP2', 'IP1', 'IP2', 'IP3', 'IP4', 'SP1', 'SP2'],

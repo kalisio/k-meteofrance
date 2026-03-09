@@ -51,7 +51,7 @@ function getEnvArray (key, defaults) {
 // Register generateTasks hook
 const generateTasks = (options) => {
   return function (hook) {
-    const { id, type, format, resolution, defaultRunTimes, defaultPackages, defaultForecastTimes } = options
+    const { id, model, format, resolution, defaultRunTimes, defaultPackages, defaultForecastTimes } = options
     const alreadyProcessed = _.get(hook, 'data.taskTemplate.alreadyProcessed', [])
     const tasks = []
     const runTimes = getEnvArray('RUN_TIMES', defaultRunTimes)
@@ -70,10 +70,10 @@ const generateTasks = (options) => {
             task.url = [
               dataGouvUrl,
               referencetime,
-              type,
+              model,
               resolution,
               pkg,
-              `${type}__${resolution}__${pkg}__${time}__${referencetime}.${format}`
+              `${model}__${resolution}__${pkg}__${time}__${referencetime}.${format}`
             ].join('/')
           }
           tasks.push(task)
@@ -87,10 +87,10 @@ const generateTasks = (options) => {
 hooks.registerHook('generateTasks', generateTasks)
 
 export default (options) => {
-  const { type, id, format, resolution } = options
+  const { model, id, format, resolution } = options
 
-  const meteofranceUrl = type === 'arome' ? meteofranceAromeUrl : meteofranceArpegeUrl
-  const meteofranceToken = type === 'arome' ? meteofranceAromeToken : meteofranceArpegeToken
+  const meteofranceUrl = model === 'arome' ? meteofranceAromeUrl : meteofranceArpegeUrl
+  const meteofranceToken = model === 'arome' ? meteofranceAromeToken : meteofranceArpegeToken
 
   return {
     id,

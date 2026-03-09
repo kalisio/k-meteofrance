@@ -6,7 +6,7 @@ export default createJob({
   id: `arome-france-high-${dataSource}`,
   resolution: dataSource === 'data-gouv' ? '001' : '0.01',
   format: 'grib2',
-  type: 'arome',
+  model: 'arome',
   defaultRunTimes: ['00:00:00','03:00:00','06:00:00','09:00:00','12:00:00','15:00:00','18:00:00','21:00:00'],
   defaultPackages: ['SP1','SP2','SP3','HP1'],
   defaultForecastTimes: [
