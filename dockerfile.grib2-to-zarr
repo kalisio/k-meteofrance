@@ -1,6 +1,6 @@
 ARG KRAWLER_TAG
 
-### Get conversion tool for generating Zarr
+# Get conversion tool for generating Zarr
 FROM kalisio/kazarr-conversion-tool:latest AS conversion-tool
 
 # 
