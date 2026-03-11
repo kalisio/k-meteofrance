@@ -1,18 +1,26 @@
 ARG KRAWLER_TAG
 
+# Get conversion tool for generating Zarr
+FROM kalisio/kazarr-conversion-tool:latest AS conversion-tool
+
 # 
 # Make a Krawler image alias to be able to take into account the KRAWLER_TAG argument
 #
 FROM kalisio/krawler:${KRAWLER_TAG} AS krawler
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
-# Default environment variables
-ENV CRON="0 21 * * *"
+USER root
+
+# Get conversion tool executable from the conversion tool image
+COPY --from=conversion-tool /app/dist/conversion_tool /opt/job/conversion_tool
+
+RUN chown -R node:node /opt/job
+USER node
 
 # Install the job
-COPY --chown=node:node job.arome-arpege.js jobfile.arome-france.js package.json yarn.lock /opt/job/
+COPY --chown=node:node job.arome-arpege.js jobfile.arome-france.js jobfile.grib2-to-zarr.js templates.json package.json yarn.lock /opt/job/
 WORKDIR /opt/job
 RUN yarn && yarn link @kalisio/krawler && yarn cache clean
 
 # Run the job
-CMD krawler --cron "$CRON" jobfile.arome-france.js
+CMD krawler jobfile.arome-france.js && krawler jobfile.grib2-to-zarr.js
