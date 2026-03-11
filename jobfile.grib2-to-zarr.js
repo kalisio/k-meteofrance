@@ -4,6 +4,7 @@ import { hooks } from  '@kalisio/krawler'
 import fs from 'fs'
 import path from 'path'
 
+// Convert an environment variable string to an array
 function getEnvArray (key) {
   if (_.isUndefined(process.env[key]) || _.isEmpty(process.env[key])) return []
   // Transform comma-separated string into array
@@ -31,6 +32,7 @@ const generateTasks = () => {
     }
 		const tasks = []
 		for (const entry of directoryEntries) {
+      let task
 			const folderName = entry.name
 			const folderFullPath = path.join(outputDir, folderName)
 			// Read all files in the current folder
@@ -41,15 +43,13 @@ const generateTasks = () => {
       const hasDoneFile = filesInFolder.includes('DONE.txt')
       if (hasDoneFile) continue
       // If folder has GRIB2 files but no DONE.txt, create a task
-			if (hasGrib2 && !hasDoneFile) tasks.push({ id: folderFullPath, folderName })
+			if (hasGrib2 && !hasDoneFile) task = { id: folderFullPath, folderName, done: false }
       // Check if folder contains all expected GRIB2 files and no extra files
       const hasAllExpected = expectedFiles.every(file => gribFiles.includes(file))
       const hasNoExtraFiles = gribFiles.every(file => expectedFiles.includes(file))
       // Mark folder as completed if all files are present
-      if (gribFiles.length === expectedFiles.length  && hasAllExpected && hasNoExtraFiles) {
-        const doneFilePath = path.join(folderFullPath, 'DONE.txt')
-        fs.writeFileSync(doneFilePath, 'COMPLETED\n')
-      }
+      if (gribFiles.length === expectedFiles.length  && hasAllExpected && hasNoExtraFiles) task.done = true
+      tasks.push(task)
 		}
     // Attach the generated tasks to the hook
 		hook.data.tasks = tasks
@@ -89,6 +89,18 @@ export default {
 					].join(' '),
 					stdout: true,
 					stderr: true
+        },
+        apply: {
+          // Mark folder as completed if all files are present
+          function: (item) => {
+            const { id, logger, done } = item
+            if (done) {
+              const doneFilePath = path.join(id, 'DONE.txt')
+              fs.writeFileSync(doneFilePath, 'COMPLETED\n')
+              logger.info(`Task ${id} marked as completed`)
+            }
+            logger.info(`Task ${id} finished`)
+          }
         }
       }
     },
