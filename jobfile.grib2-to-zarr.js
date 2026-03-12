@@ -41,7 +41,7 @@ const generateTasks = () => {
       const gribFiles = filesInFolder.filter(file => file.endsWith('.grib2'))
       const hasGrib2 = gribFiles.length > 0
       const hasDoneFile = filesInFolder.includes('DONE.txt')
-      if (hasDoneFile) continue
+      if (!hasGrib2 && hasDoneFile) continue
       // If folder has GRIB2 files but no DONE.txt, create a task
 			if (hasGrib2 && !hasDoneFile) task = { id: folderFullPath, folderName }
       // Check if folder contains all expected GRIB2 files and no extra files
