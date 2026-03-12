@@ -94,6 +94,7 @@ export default {
           // Mark folder as completed if all files are present
           function: (item) => {
             const { id, logger, done } = item
+            if (!logger || !id) return
             if (done) {
               const doneFilePath = path.join(id, 'DONE.txt')
               fs.writeFileSync(doneFilePath, 'COMPLETED\n')
