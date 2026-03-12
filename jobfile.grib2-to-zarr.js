@@ -32,7 +32,7 @@ const generateTasks = () => {
     }
 		const tasks = []
 		for (const entry of directoryEntries) {
-      let task
+      let task = { id: 'undefined', done: false }
 			const folderName = entry.name
 			const folderFullPath = path.join(outputDir, folderName)
 			// Read all files in the current folder
@@ -43,7 +43,7 @@ const generateTasks = () => {
       const hasDoneFile = filesInFolder.includes('DONE.txt')
       if (hasDoneFile) continue
       // If folder has GRIB2 files but no DONE.txt, create a task
-			if (hasGrib2 && !hasDoneFile) task = { id: folderFullPath, folderName, done: false }
+			if (hasGrib2 && !hasDoneFile) task = { id: folderFullPath, folderName }
       // Check if folder contains all expected GRIB2 files and no extra files
       const hasAllExpected = expectedFiles.every(file => gribFiles.includes(file))
       const hasNoExtraFiles = gribFiles.every(file => expectedFiles.includes(file))
