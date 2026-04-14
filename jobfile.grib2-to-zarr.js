@@ -14,7 +14,7 @@ function getEnvArray (key) {
 // Job configuration
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
-const model = process.env.MODEL || 'arpege'
+const template = process.env.TEMPLATE || 'arpege-isobaric'
 const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 's3://mf/tests/s3/'
 const packages = getEnvArray('PACKAGES')
 const forecastTimes = getEnvArray('FORECAST_TIMES')
@@ -80,7 +80,7 @@ export default {
           command: [
 						'./conversion_tool new-dataset', 
 						'--templates-path ./templates.json', 
-						`-t ${model}`, 
+						`-t ${template}`, 
 						'--data-mapping cells', 
 						"-c '{\"version\": 2}'", 
 						`-o ${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(.+)$/, "$1/$2/$3") %>.zarr`, 
