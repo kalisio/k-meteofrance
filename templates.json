@@ -1,5 +1,5 @@
 {
-  "arpege": {
+  "arpege-isobaric": {
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
@@ -37,7 +37,7 @@
       ]
     }
   },
-  "arome": {
+  "arome-isobaric": {
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
@@ -65,6 +65,47 @@
           "w": "verticalVelocity",
           "clwc": "cloudLiquidWaterContent",
           "tke": "turbulentKineticEnergy"
+        } } },
+        "unify_chunks",
+        "save",
+        "clean"
+      ]
+    }
+  },
+  "surface": {
+    "variables": {
+      "lon": "longitude",
+      "lat": "latitude",
+      "height": "heightAboveGround",
+      "time": "valid_time"
+    },
+    "concat_dim": "step",
+    "pipelines": {
+      "preprocess": [
+        { "type": "process", "name": "load_and_merge_from_grib", "params": { "discriminator": ["SP1"] }},
+        { "type": "process", "name": "exclude_variables", "params": { "exclude_vars": ["unknown"] }},
+        { "type": "process", "name": "rename_variables", "params": { "renameMap": {
+          "cp": "convectivePrecipitation",
+          "crr": "convectiveRainRate",
+          "csfwe": "convectiveSnowfallWaterEquivalent",
+          "efg10": "timeMaximumEastwardWindGust10m",
+          "fg10": "timeMaximumWindGust10m",
+          "lsfwe": "largeScaleSnowfallWaterEquivalent",
+          "lsp": "largeScalePrecipitation",
+          "lsrr": "largeScaleRainRate",
+          "nfg10": "timeMaximumNorthwardWindGust10m", 
+          "prmsl": "meanSeaLevelPressure",
+          "r2": "relativeHumidity2m",
+          "si10": "windSpeed10m",
+          "ssrd": "surfaceSolarRadiationDownwards",
+          "t2m": "temperature2m",
+          "tirf": "timeIntegralRainFlux",
+          "tgrp": "graupelPrecipitation",
+          "tp": "totalPrecipitation",
+          "tsnowp": "totalSnowPrecipitation",
+          "u10": "uWind10m",
+          "v10": "vWind10m",
+          "wdir10": "windDirection10m"
         } } },
         "unify_chunks",
         "save",

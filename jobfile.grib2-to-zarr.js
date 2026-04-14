@@ -83,7 +83,7 @@ export default {
 						`-t ${template}`, 
 						'--data-mapping cells', 
 						"-c '{\"version\": 2}'", 
-						`-o ${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(.+)$/, "$1/$2/$3") %>.zarr`, 
+            `-o ${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(\d{4})-(\d{2})-(\d{2})T([^/]+)$/, "$1/$2/$3/$4/$5/$6.zarr") %>`, 
 						'dummy-id <%= id %>'
 					].join(' '),
 					stdout: true,
