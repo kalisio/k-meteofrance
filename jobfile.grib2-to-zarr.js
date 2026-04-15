@@ -15,7 +15,7 @@ function getEnvArray (key) {
 const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const template = process.env.TEMPLATE || 'arpege-isobaric'
-const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 's3://mf/tests/s3/'
+const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 'meteofrance/isobaric/'
 const packages = getEnvArray('PACKAGES')
 const forecastTimes = getEnvArray('FORECAST_TIMES')
 
@@ -83,7 +83,7 @@ export default {
 						`-t ${template}`, 
 						'--data-mapping cells', 
 						"-c '{\"version\": 2}'", 
-            `-o ${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(\d{4})-(\d{2})-(\d{2})T([^/]+)$/, "$1/$2/$3/$4/$5/$6.zarr") %>`, 
+            `-o s3://${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(\d{4})-(\d{2})-(\d{2})T([^/]+)$/, "$1/$2/$3/$4/$5/$6.zarr") %>`, 
 						'dummy-id <%= id %>'
 					].join(' '),
 					stdout: true,
