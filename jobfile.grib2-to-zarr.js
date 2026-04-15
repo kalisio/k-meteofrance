@@ -31,9 +31,16 @@ const generateTasks = () => {
       }
     }
 		const tasks = []
+		// Ensure S3 path does not end with a slash for consistent path generation
+		const cleanS3Path = s3DatasetsRoot.replace(/\/+$/, '')
+		// Regex to capture parts of the folder name for path generation
+		const folderNameCaptureRegex = /^([^-]+)[^_]+_([^_]+)_(\d{4})-(\d{2})-(\d{2})T([^/]+)$/
 		for (const entry of directoryEntries) {
 			const folderName = entry.name
 			const folderFullPath = path.join(outputDir, folderName)
+			// Get zarr dataset target S3 path based on folder name
+			const newPath = folderName.replace(folderNameCaptureRegex, "$1/$2/$3/$4/$5/$6")
+      const targetFolder = `s3://${cleanS3Path}/${newPath}.zarr`
 			// Read all files in the current folder
 			const filesInFolder = fs.readdirSync(folderFullPath)
       // Check for GRIB2 files and DONE.txt
@@ -42,7 +49,7 @@ const generateTasks = () => {
       const hasDoneFile = filesInFolder.includes('DONE.txt')
       if (!hasGrib2 || hasDoneFile) continue
       // If folder has GRIB2 files but no DONE.txt, create a task
-      const task = { id: folderFullPath, folderName, done: false }
+      const task = { id: folderFullPath, targetFolder, done: false }
       // Check if folder contains all expected GRIB2 files and no extra files
       const hasAllExpected = expectedFiles.every(file => gribFiles.includes(file))
       const hasNoExtraFiles = gribFiles.every(file => expectedFiles.includes(file))
@@ -83,7 +90,7 @@ export default {
 						`-t ${template}`, 
 						'--data-mapping cells', 
 						"-c '{\"version\": 2}'", 
-            `-o s3://${s3DatasetsRoot}<%= folderName.replace(/^([^-]+)[^_]+_([^_]+)_(\d{4})-(\d{2})-(\d{2})T([^/]+)$/, "$1/$2/$3/$4/$5/$6.zarr") %>`, 
+						`-o <%= targetFolder %>`, 
 						'dummy-id <%= id %>'
 					].join(' '),
 					stdout: true,
