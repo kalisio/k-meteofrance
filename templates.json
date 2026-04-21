@@ -77,9 +77,12 @@
       "lon": "longitude",
       "lat": "latitude",
       "height": "heightAboveGround",
-      "time": "valid_time"
+      "time": "step"
     },
     "concat_dim": "step",
+    "referenceTime": {
+      "variable": "time"
+    },
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": { "discriminator": ["SP1"] }},
@@ -107,6 +110,7 @@
           "v10": "vWind10m",
           "wdir10": "windDirection10m"
         } } },
+        "delta_time_to_datetime",
         "unify_chunks",
         "save",
         "clean"
