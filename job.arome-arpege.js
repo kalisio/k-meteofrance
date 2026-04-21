@@ -7,7 +7,7 @@ import path from 'path'
 
 // Job configuration
 const outputDir = process.env.OUTPUT_DIR || './output'
-const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 4
+const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 2
 const dataSource = process.env.DATA_SOURCE || 'meteofrance'
 const meteofranceAromeUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetAROME/v1/productARO'
 const meteofranceArpegeUrl = 'https://public-api.meteofrance.fr/previnum/DPPaquetARPEGE/v1/productARP'
