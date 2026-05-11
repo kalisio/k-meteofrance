@@ -91,7 +91,7 @@ export default {
 						'--data-mapping cells', 
 						"-c '{\"version\": 2}'", 
 						`-o <%= targetFolder %>`, 
-						'dummy-id <%= id %>'
+						'<%= id %>'
 					].join(' '),
 					stdout: true,
 					stderr: true

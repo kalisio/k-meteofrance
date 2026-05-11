@@ -3,7 +3,7 @@
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
-      "height": "heightAboveGround",
+      "height": "ATTRIBUTES.GRIB_typeOfLevel",
       "time": "valid_time"
     },
     "concat_dim": "step",
@@ -15,11 +15,11 @@
           "dataset_backend_kwargs": [
             {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
             {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
-            {"filter_by_keys": {"shortName": ["clwc", "tke"]}},
+            {"filter_by_keys": {"shortName": ["clwc", "ciwc", "tke"]}},
             {"filter_by_keys": {"shortName": ["z"]}}
           ]
         }},
-        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "z_IP4", "t", "wdir", "ws", "w", "clwc", "tke"]} },
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "z_IP4", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
           "r": "relativeHumidity",
           "z": "geopotential_pressure",
@@ -29,6 +29,7 @@
           "ws": "windSpeed",
           "w": "verticalVelocity",
           "clwc": "cloudLiquidWaterContent",
+          "ciwc": "cloudIceWaterContent",
           "tke": "turbulentKineticEnergy"
         } } },
         "unify_chunks",
@@ -41,7 +42,7 @@
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
-      "height": "heightAboveGround",
+      "height": "isobaricInhPa",
       "time": "valid_time"
     },
     "concat_dim": "step",
@@ -51,11 +52,11 @@
           "discriminator": ["IP1", "IP2", "IP3", "IP4"],
           "dataset_backend_kwargs": [
             {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
-            {"filter_by_keys": {"shortName": ["clwc"]}},
+            {"filter_by_keys": {"shortName": ["clwc", "ciwc"]}},
             {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
             {"filter_by_keys": {"shortName": "tke"}}]
         }},
-        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "tke"]} },
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
           "r": "relativeHumidity",
           "z": "geopotential",
@@ -64,6 +65,7 @@
           "ws": "windSpeed",
           "w": "verticalVelocity",
           "clwc": "cloudLiquidWaterContent",
+          "ciwc": "cloudIceWaterContent",
           "tke": "turbulentKineticEnergy"
         } } },
         "unify_chunks",
@@ -76,7 +78,6 @@
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
-      "height": "heightAboveGround",
       "time": "step"
     },
     "concat_dim": "step",
@@ -86,24 +87,14 @@
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": { "discriminator": ["SP1"] }},
-        { "type": "process", "name": "exclude_variables", "params": { "exclude_vars": ["unknown"] }},
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["efg10", "fg10", "nfg10", "r2", "si10", "t2m", "tp", "tsnowp", "u10", "v10", "wdir10"] }},
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
-          "cp": "convectivePrecipitation",
-          "crr": "convectiveRainRate",
-          "csfwe": "convectiveSnowfallWaterEquivalent",
-          "efg10": "timeMaximumEastwardWindGust10m",
-          "fg10": "timeMaximumWindGust10m",
-          "lsfwe": "largeScaleSnowfallWaterEquivalent",
-          "lsp": "largeScalePrecipitation",
-          "lsrr": "largeScaleRainRate",
-          "nfg10": "timeMaximumNorthwardWindGust10m", 
-          "prmsl": "meanSeaLevelPressure",
+          "efg10": "eastwardWindGust10m",
+          "fg10": "windGust10m",
+          "nfg10": "northwardWindGust10m",
           "r2": "relativeHumidity2m",
           "si10": "windSpeed10m",
-          "ssrd": "surfaceSolarRadiationDownwards",
           "t2m": "temperature2m",
-          "tirf": "timeIntegralRainFlux",
-          "tgrp": "graupelPrecipitation",
           "tp": "totalPrecipitation",
           "tsnowp": "totalSnowPrecipitation",
           "u10": "uWind10m",
