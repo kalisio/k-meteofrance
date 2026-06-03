@@ -3,7 +3,7 @@
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
-      "height": "ATTRIBUTES.GRIB_typeOfLevel",
+      "level": "ATTRIBUTES.GRIB_typeOfLevel",
       "time": "valid_time"
     },
     "concat_dim": "step",
@@ -42,7 +42,7 @@
     "variables": {
       "lon": "longitude",
       "lat": "latitude",
-      "height": "isobaricInhPa",
+      "level": "isobaricInhPa",
       "time": "valid_time"
     },
     "concat_dim": "step",
