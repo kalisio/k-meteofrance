@@ -7,23 +7,21 @@
       "time": "valid_time"
     },
     "concat_dim": "step",
+    "float64_to_float32": true,
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
-          "discriminator": ["IP1", "IP2", "IP3", "IP4"],
-          "rename_before_merge": [{}, {}, {}, {"z": "z_IP4"}],
+          "discriminator": ["IP1", "IP2", "IP3"],
           "dataset_backend_kwargs": [
             {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
             {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
-            {"filter_by_keys": {"shortName": ["clwc", "ciwc", "tke"]}},
-            {"filter_by_keys": {"shortName": ["z"]}}
+            {"filter_by_keys": {"shortName": ["clwc", "ciwc", "tke"]}}
           ]
         }},
-        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "z_IP4", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
           "r": "relativeHumidity",
-          "z": "geopotential_pressure",
-          "z_IP4": "geopotential_potentialVorticity",
+          "z": "geopotential",
           "t": "temperature", 
           "wdir": "windDirection",
           "ws": "windSpeed",
@@ -46,6 +44,7 @@
       "time": "valid_time"
     },
     "concat_dim": "step",
+    "float64_to_float32": true,
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
@@ -84,6 +83,7 @@
     "referenceTime": {
       "variable": "time"
     },
+    "float64_to_float32": true,
     "pipelines": {
       "preprocess": [
         { "type": "process", "name": "load_and_merge_from_grib", "params": { "discriminator": ["SP1"] }},
