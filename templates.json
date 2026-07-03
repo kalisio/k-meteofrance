@@ -13,16 +13,18 @@
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
           "discriminator": ["IP1", "IP2", "IP3"],
           "dataset_backend_kwargs": [
-            {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
+            {"filter_by_keys": {"shortName": ["r", "z", "t", "u", "v"]}},
             {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
             {"filter_by_keys": {"shortName": ["clwc", "ciwc", "tke"]}}
           ]
         }},
-        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "u", "v", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
           "r": "relativeHumidity",
           "z": "geopotential",
-          "t": "temperature", 
+          "t": "temperature",
+          "u": "uWind",
+          "v": "vWind",
           "wdir": "windDirection",
           "ws": "windSpeed",
           "w": "verticalVelocity",
@@ -50,16 +52,18 @@
         { "type": "process", "name": "load_and_merge_from_grib", "params": {
           "discriminator": ["IP1", "IP2", "IP3", "IP4"],
           "dataset_backend_kwargs": [
-            {"filter_by_keys": {"shortName": ["r", "z", "t"]}},
+            {"filter_by_keys": {"shortName": ["r", "z", "t", "u", "v"]}},
             {"filter_by_keys": {"shortName": ["clwc", "ciwc"]}},
             {"filter_by_keys": {"shortName": ["wdir", "ws", "w"]}},
             {"filter_by_keys": {"shortName": "tke"}}]
         }},
-        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
+        { "type": "process", "name": "keep_variables", "params": { "keep_vars": ["r", "z", "t", "u", "v", "wdir", "ws", "w", "clwc", "ciwc", "tke"]} },
         { "type": "process", "name": "rename_variables", "params": { "renameMap": {
           "r": "relativeHumidity",
           "z": "geopotential",
-          "t": "temperature", 
+          "t": "temperature",
+          "u": "uWind",
+          "v": "vWind",
           "wdir": "windDirection",
           "ws": "windSpeed",
           "w": "verticalVelocity",
