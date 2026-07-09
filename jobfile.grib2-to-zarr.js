@@ -16,7 +16,7 @@ const outputDir = process.env.OUTPUT_DIR || './output'
 const workersLimit = process.env.WORKERS_LIMIT ? Number(process.env.WORKERS_LIMIT) : 1
 const template = process.env.TEMPLATE || 'arpege-isobaric'
 const s3DatasetsRoot = process.env.S3_DATASETS_ROOT || 'meteofrance/isobaric/'
-const s3StorageClass = process.env.S3_STORAGE_CLASS || 'EXPRESS_ONEZONE'
+const s3StorageClass = process.env.S3_STORAGE_CLASS || 'STANDARD'
 const packages = getEnvArray('PACKAGES')
 const forecastTimes = getEnvArray('FORECAST_TIMES')
 
