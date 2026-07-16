@@ -15,7 +15,7 @@ const dataGouvUrl = 'https://object.files.data.gouv.fr/meteofrance-pnt/pnt'
 const meteofranceAromeToken = process.env.AROME_TOKEN
 const meteofranceArpegeToken = process.env.ARPEGE_TOKEN
 // Don't go back in time older than 1 day
-const oldestRunIntervalMs = (process.env.OLDEST_RUN_INTERVAL_MS ? Number(process.env.OLDEST_RUN_INTERVAL) : 24 * 3600 * 1000)
+const oldestRunIntervalMs = (process.env.OLDEST_RUN_INTERVAL_MS ? Number(process.env.OLDEST_RUN_INTERVAL_MS) : 24 * 3600 * 1000)
 
 // Utility functions
 function getReferenceTimes (runTimes) {
