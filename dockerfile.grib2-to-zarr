@@ -13,7 +13,7 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 ENV CRON="0 21 * * *"
 
 # Get conversion tool executable from the conversion tool image
-COPY --from=conversion-tool /app/dist/conversion_tool /opt/job/conversion_tool
+COPY --from=conversion-tool /app/dist/kazarr /opt/job/kazarr
 
 # Fix permissions 
 USER root
