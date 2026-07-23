@@ -86,7 +86,7 @@ export default {
         grib2ToZarr: {
           hook: 'runCommand',
           command: [
-						'./conversion_tool new-dataset', 
+						'./kazarr', 
 						'--templates-path ./templates.json', 
 						`-t ${template}`, 
 						'--data-mapping cells', 
