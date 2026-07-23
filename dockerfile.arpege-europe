@@ -12,7 +12,7 @@ LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 USER root
 
 # Get conversion tool executable from the conversion tool image
-COPY --from=conversion-tool /app/dist/conversion_tool /opt/job/conversion_tool
+COPY --from=conversion-tool /app/dist/kazarr /opt/job/kazarr
 
 RUN chown -R node:node /opt/job
 USER node
